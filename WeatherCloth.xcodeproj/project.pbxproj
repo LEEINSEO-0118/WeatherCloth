@@ -56,15 +56,39 @@
 		53ECDA0327ECAE44003D67E2 /* WeatherCloth */ = {
 			isa = PBXGroup;
 			children = (
+				53ECDA1827EDBBF5003D67E2 /* View */,
+				53ECDA1927EDBC00003D67E2 /* ViewModel */,
+				53ECDA1A27EDBC07003D67E2 /* Model */,
 				53ECDA0427ECAE44003D67E2 /* AppDelegate.swift */,
 				53ECDA0627ECAE44003D67E2 /* SceneDelegate.swift */,
-				53ECDA0827ECAE44003D67E2 /* ViewController.swift */,
 				53ECDA0A27ECAE44003D67E2 /* Main.storyboard */,
 				53ECDA0D27ECAE46003D67E2 /* Assets.xcassets */,
 				53ECDA0F27ECAE46003D67E2 /* LaunchScreen.storyboard */,
 				53ECDA1227ECAE46003D67E2 /* Info.plist */,
 			);
 			path = WeatherCloth;
+			sourceTree = "<group>";
+		};
+		53ECDA1827EDBBF5003D67E2 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				53ECDA0827ECAE44003D67E2 /* ViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		53ECDA1927EDBC00003D67E2 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		53ECDA1A27EDBC07003D67E2 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
