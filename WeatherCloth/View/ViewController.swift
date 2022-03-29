@@ -49,7 +49,7 @@ class ViewController: UIViewController {
         return label
     }()
     
-    var carousel: UICollectionView = {
+    var dailyWeather: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout() // 없으면 collecctionView 생성이 안된다.
         flowLayout.scrollDirection = .horizontal
         flowLayout.minimumLineSpacing = 10 // 셀 간격
@@ -58,6 +58,14 @@ class ViewController: UIViewController {
         collectionView.backgroundColor = UIColor.clear
         
         return collectionView
+    }()
+    
+    var weekWeather: UITableView = {
+        var tableView = UITableView()
+        tableView.layer.borderColor = UIColor.blue.cgColor
+        tableView.layer.borderWidth = CGFloat(2)
+        
+        return tableView
     }()
     
     //MARK: - viewDidLoad
@@ -71,9 +79,13 @@ class ViewController: UIViewController {
     
     //MARK: - delegate
     func delegationing() {
-        carousel.dataSource = self
-        carousel.delegate = self
-        carousel.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        dailyWeather.dataSource = self
+        dailyWeather.delegate = self
+        dailyWeather.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        
+        weekWeather.delegate = self
+        weekWeather.dataSource = self
+        weekWeather.register(UINib(nibName: "cell", bundle: nil), forCellReuseIdentifier: "cell")
 
     }
     
@@ -81,7 +93,8 @@ class ViewController: UIViewController {
     func addingViews() {
         self.view.addSubview(storedLocationsButton)
         self.view.addSubview(locationName)
-        self.view.addSubview(carousel)
+        self.view.addSubview(dailyWeather)
+        self.view.addSubview(weekWeather)
 
     }
     
@@ -89,7 +102,8 @@ class ViewController: UIViewController {
     func settingLayOut() {
         storedLocationsButton.translatesAutoresizingMaskIntoConstraints = false
         locationName.translatesAutoresizingMaskIntoConstraints = false
-        carousel.translatesAutoresizingMaskIntoConstraints = false
+        dailyWeather.translatesAutoresizingMaskIntoConstraints = false
+        weekWeather.translatesAutoresizingMaskIntoConstraints = false
 
         locationName.topAnchor.constraint(equalTo: view.topAnchor , constant: 50).isActive = true
         locationName.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20).isActive = true
@@ -98,18 +112,27 @@ class ViewController: UIViewController {
         storedLocationsButton.centerYAnchor.constraint(equalTo: locationName.centerYAnchor).isActive = true
         storedLocationsButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20).isActive = true
         
-        carousel.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0).isActive = true
-        carousel.topAnchor.constraint(equalTo: view.topAnchor, constant: 100).isActive = true
-        carousel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20).isActive = true
-        carousel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20).isActive = true
-//        carousel.widthAnchor.constraint(equalToConstant: 300).isActive = true
-        carousel.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        dailyWeather.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0).isActive = true
+        dailyWeather.topAnchor.constraint(equalTo: view.topAnchor, constant: 100).isActive = true
+        dailyWeather.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20).isActive = true
+        dailyWeather.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20).isActive = true
+        dailyWeather.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        
+        weekWeather.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        weekWeather.topAnchor.constraint(equalTo: dailyWeather.bottomAnchor, constant: 30).isActive = true
+        weekWeather.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20).isActive = true
+        weekWeather.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20).isActive = true
+        
     }
 
 
 }
 
+
+//MARK: - CollectionViewExtension
+
 extension ViewController: UICollectionViewDataSource {
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 10
     }
@@ -130,4 +153,26 @@ extension ViewController: UICollectionViewDelegateFlowLayout { // cell 크기 �
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 80, height: 80)
     }
+}
+
+
+//MARK: - tableViewExtension
+
+extension ViewController: UITableViewDelegate {
+    
+}
+
+extension ViewController: UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        7
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = weekWeather.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        
+        return cell
+    }
+    
+    
 }
