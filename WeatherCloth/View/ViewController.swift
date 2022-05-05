@@ -31,16 +31,16 @@ struct ViewPreview: PreviewProvider {
 class ViewController: UIViewController {
     
     //MARK: - Objects
-    var storedLocationsButton: UIButton = {
+    private let storedLocationsButton: UIButton = {
         var button = UIButton()
-//        button.setTitle("지역", for: .normal)
+//        button.setTitle("지역", for: .normal) // 이름 없어도 될듯?
 //        button.setTitleColor(UIColor.black, for: .normal)
         button.setImage(UIImage(systemName: "list.bullet"), for: .normal)
         button.tintColor = UIColor.black
         return button
     }()
     
-    var locationName: UILabel = {
+    private let locationName: UILabel = {
         var label = UILabel()
         label.text = "대구"
         label.textColor = UIColor.black
@@ -49,7 +49,7 @@ class ViewController: UIViewController {
         return label
     }()
     
-    var dailyWeather: UICollectionView = {
+    private let dailyWeather: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout() // 없으면 collecctionView 생성이 안된다.
         flowLayout.scrollDirection = .horizontal
         flowLayout.minimumLineSpacing = 10 // 셀 간격
@@ -60,11 +60,8 @@ class ViewController: UIViewController {
         return collectionView
     }()
     
-    var weekWeather: UITableView = {
-        var tableView = UITableView()
-        tableView.layer.borderColor = UIColor.blue.cgColor
-        tableView.layer.borderWidth = CGFloat(2)
-        //
+    private let weekWeather: UITableView = {
+        let tableView = UITableView()
         
         return tableView
     }()
@@ -74,8 +71,8 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         addingViews()
-        settingLayOut()
         delegationing()
+        settingLayOut()
     }
     
     //MARK: - delegate
@@ -86,8 +83,7 @@ class ViewController: UIViewController {
         
         weekWeather.delegate = self
         weekWeather.dataSource = self
-        weekWeather.register(UINib(nibName: "cell", bundle: nil), forCellReuseIdentifier: "cell")
-
+        weekWeather.register(WeekWeatherCell.self, forCellReuseIdentifier: WeekWeatherCell.identifier)
     }
     
     //MARK: - addingViews
@@ -96,34 +92,32 @@ class ViewController: UIViewController {
         self.view.addSubview(locationName)
         self.view.addSubview(dailyWeather)
         self.view.addSubview(weekWeather)
-
     }
     
     //MARK: - methods
     func settingLayOut() {
-        storedLocationsButton.translatesAutoresizingMaskIntoConstraints = false
+        
         locationName.translatesAutoresizingMaskIntoConstraints = false
-        dailyWeather.translatesAutoresizingMaskIntoConstraints = false
-        weekWeather.translatesAutoresizingMaskIntoConstraints = false
-
         locationName.topAnchor.constraint(equalTo: view.topAnchor , constant: 50).isActive = true
         locationName.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20).isActive = true
         locationName.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 50).isActive = true
         
+        storedLocationsButton.translatesAutoresizingMaskIntoConstraints = false
         storedLocationsButton.centerYAnchor.constraint(equalTo: locationName.centerYAnchor).isActive = true
         storedLocationsButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20).isActive = true
         
+        dailyWeather.translatesAutoresizingMaskIntoConstraints = false
         dailyWeather.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0).isActive = true
         dailyWeather.topAnchor.constraint(equalTo: view.topAnchor, constant: 100).isActive = true
         dailyWeather.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20).isActive = true
         dailyWeather.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20).isActive = true
         dailyWeather.heightAnchor.constraint(equalToConstant: 100).isActive = true
         
-        weekWeather.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        weekWeather.topAnchor.constraint(equalTo: dailyWeather.bottomAnchor, constant: 30).isActive = true
-        weekWeather.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20).isActive = true
-        weekWeather.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20).isActive = true
-        
+        weekWeather.translatesAutoresizingMaskIntoConstraints = false
+        weekWeather.topAnchor.constraint(equalTo: dailyWeather.bottomAnchor).isActive = true
+        weekWeather.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -20).isActive = true
+        weekWeather.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 20).isActive = true
+        weekWeather.heightAnchor.constraint(equalToConstant: 400).isActive = true
     }
 
 
@@ -166,14 +160,17 @@ extension ViewController: UITableViewDelegate {
 extension ViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        7
+        return 7
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = weekWeather.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        let cell = weekWeather.dequeueReusableCell(withIdentifier: WeekWeatherCell.identifier, for: indexPath) as! WeekWeatherCell
         
         return cell
     }
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return CGFloat(60)
+    }
     
 }
